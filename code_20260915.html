@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大五人格专业测评 | Big Five Personality Assessment</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+:root{
+  --bg:#f4f2ec;--bg2:#ebe8e0;--card:#fff;--dark:#141428;--dark2:#1e1e3a;--dark3:#282848;
+  --txt:#1a1a2e;--txt2:#55556a;--muted:#9a9ab0;--light:#d0d0e0;
+  --acc:#b8860b;--acc2:#d4a84b;--acc3:#8b6508;
+  --bd:#e2dfd7;--bdl:#ecebe4;
+  --sh1:0 2px 8px rgba(20,20,40,.05);--sh2:0 4px 24px rgba(20,20,40,.08);--sh3:0 12px 48px rgba(20,20,40,.12);
+  --r1:8px;--r2:14px;--r3:20px;
+  --O:#2e6b8a;--C:#4a7c59;--E:#c4922a;--A:#b05070;--N:#6a5a9a;
+  --fs:'Noto Serif SC','Songti SC',serif;--fn:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{font-family:var(--fn);background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.view{display:none;min-height:100vh;animation:fadeIn .4s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
+/* ===== Welcome ===== */
+.wc{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 20px;position:relative;overflow:hidden}
+.wc-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 15% 5%,rgba(184,134,11,.07) 0%,transparent 45%),radial-gradient(ellipse at 85% 95%,rgba(46,107,138,.06) 0%,transparent 45%);pointer-events:none}
+.wc-hero{text-align:center;max-width:560px;position:relative;z-index:1}
+.wc-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 18px;background:rgba(184,134,11,.08);border:1px solid rgba(184,134,11,.22);border-radius:100px;font-size:12px;font-weight:600;color:var(--acc3);letter-spacing:.5px;margin-bottom:28px}
+.wc-badge .dot{width:6px;height:6px;background:var(--acc);border-radius:50%;animation:pulse 2s infinite}
+.wc-title{font-family:var(--fs);font-size:clamp(30px,8vw,48px);font-weight:900;line-height:1.2;margin-bottom:14px;letter-spacing:-.5px}
+.wc-title .acc{color:var(--acc)}
+.wc-sub{font-size:14.5px;color:var(--txt2);line-height:1.85;margin-bottom:28px}
+.ocean-row{display:flex;justify-content:center;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.ob{width:52px;text-align:center}
+.ol{width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;font-family:var(--fs);font-size:22px;font-weight:700;color:#fff;box-shadow:var(--sh1);margin-bottom:6px;transition:transform .3s}
+.ob:hover .ol{transform:translateY(-4px) scale(1.05)}
+.ol.o{background:var(--O)}.ol.c{background:var(--C)}.ol.e{background:var(--E)}.ol.a{background:var(--A)}.ol.n{background:var(--N)}
+.on{font-size:10px;color:var(--muted);line-height:1.3}
+.wc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.sc{background:var(--card);border:1px solid var(--bdl);border-radius:var(--r2);padding:14px 8px;text-align:center}
+.sc .num{font-family:var(--fs);font-size:22px;font-weight:700;color:var(--acc);display:block;margin-bottom:2px}
+.sc .label{font-size:10.5px;color:var(--muted);line-height:1.35}
+.wc-btns{display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 28px;border-radius:var(--r2);font-size:15.5px;font-weight:600;font-family:var(--fn);cursor:pointer;transition:all .25s ease;border:1.5px solid transparent}
+.btn-dark{background:var(--dark);color:#fff;box-shadow:var(--sh2)}
+.btn-dark:hover{background:var(--dark2);transform:translateY(-1px);box-shadow:var(--sh3)}
+.btn-outline{background:transparent;color:var(--txt);border-color:var(--bd)}
+.btn-outline:hover{border-color:var(--acc);color:var(--acc3);background:rgba(184,134,11,.04)}
+.btn .arrow{transition:transform .25s}
+.btn:hover .arrow{transform:translateX(4px)}
+.wc-note{margin-top:18px;font-size:11.5px;color:var(--muted);line-height:1.7}
+
+/* ===== About Page ===== */
+.ab-wrap{max-width:760px;margin:0 auto;padding:32px 20px 60px}
+.ab-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2);cursor:pointer;padding:6px 12px;border-radius:8px;transition:all .2s;margin-bottom:24px;background:var(--card);border:1px solid var(--bdl)}
+.ab-back:hover{color:var(--acc3);border-color:var(--acc)}
+.ab-hero{background:linear-gradient(135deg,var(--dark),var(--dark3));color:#fff;border-radius:var(--r3);padding:40px 28px;margin-bottom:24px;position:relative;overflow:hidden}
+.ab-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(184,134,11,.15) 0%,transparent 50%);pointer-events:none}
+.ab-hero h1{font-family:var(--fs);font-size:clamp(24px,6vw,34px);font-weight:900;margin-bottom:10px;position:relative;z-index:1}
+.ab-hero p{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;position:relative;z-index:1;max-width:560px}
+.ab-section{background:var(--card);border-radius:var(--r2);padding:24px 22px;margin-bottom:16px;border:1px solid var(--bdl);box-shadow:var(--sh1)}
+.ab-section h2{font-family:var(--fs);font-size:18px;font-weight:700;color:var(--txt);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.ab-section h2 .ico{width:32px;height:32px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;flex-shrink:0}
+.ab-section p{font-size:14px;color:var(--txt2);line-height:1.85;margin-bottom:10px}
+.ab-section p:last-child{margin-bottom:0}
+.ab-section strong{color:var(--txt);font-weight:600}
+.ab-dims{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}
+.ab-dim{text-align:center;padding:12px 4px;border-radius:var(--r1);background:var(--bg)}
+.ab-dim .l{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fs);font-size:14px;font-weight:700;margin-bottom:6px}
+.ab-dim .n{font-size:11px;color:var(--txt2);font-weight:600}
+.ab-dim .d{font-size:9.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.ab-orgs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.ab-org{background:var(--bg);border-radius:var(--r1);padding:14px 12px;text-align:center;border:1px solid var(--bdl)}
+.ab-org .logo{width:44px;height:44px;border-radius:12px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:var(--fs);font-size:16px;font-weight:900;color:#fff}
+.ab-org .name{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.ab-org .desc{font-size:10px;color:var(--muted);line-height:1.4}
+.ab-timeline{position:relative;padding-left:24px;margin-top:14px}
+.ab-timeline::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--bd)}
+.ab-tl-item{position:relative;margin-bottom:16px}
+.ab-tl-item:last-child{margin-bottom:0}
+.ab-tl-item::before{content:'';position:absolute;left:-21px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid var(--bg)}
+.ab-tl-year{font-size:12px;font-weight:700;color:var(--acc3);margin-bottom:2px}
+.ab-tl-text{font-size:13px;color:var(--txt2);line-height:1.6}
+.ab-quote{background:var(--bg);border-left:3px solid var(--acc);padding:14px 18px;border-radius:0 var(--r1) var(--r1) 0;margin:14px 0;font-style:italic;color:var(--txt2);font-size:13.5px;line-height:1.8}
+.ab-quote .author{display:block;margin-top:8px;font-style:normal;font-weight:600;color:var(--txt);font-size:12px}
+
+/* ===== Test View ===== */
+.th{position:sticky;top:0;z-index:100;background:rgba(244,242,236,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--bdl);padding:14px 20px 12px}
+.th-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.th-label{font-size:13px;font-weight:500;color:var(--txt2)}
+.th-label .cur{font-family:var(--fs);font-size:19px;font-weight:700;color:var(--txt)}
+.th-label .tot{color:var(--muted)}
+.th-exit{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s}
+.th-exit:hover{color:var(--txt2);background:rgba(0,0,0,.04)}
+.auto-tip{text-align:center;font-size:11.5px;color:var(--acc3);background:rgba(184,134,11,.08);padding:6px 12px;border-radius:8px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
+.auto-tip .dot{width:6px;height:6px;background:var(--acc);border-radius:50%;animation:pulse 1.5s infinite}
+.pbar{width:100%;height:4px;background:var(--bd);border-radius:100px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--acc2),var(--acc3));border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.tb{max-width:620px;margin:0 auto;padding:24px 18px 120px}
+.qcard{background:var(--card);border-radius:var(--r3);padding:28px 22px;box-shadow:var(--sh1);border:1px solid var(--bdl);margin-bottom:20px;overflow:hidden}
+.qcard.next-anim{animation:slideLeft .4s cubic-bezier(.4,0,.2,1)}
+.qcard.prev-anim{animation:slideRight .4s cubic-bezier(.4,0,.2,1)}
+.qmeta{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.qnum{font-family:var(--fs);font-size:13px;font-weight:700;color:var(--acc3);background:rgba(184,134,11,.08);padding:3px 10px;border-radius:6px}
+.qstem{font-size:12.5px;color:var(--muted);font-weight:500}
+.qtext{font-family:var(--fs);font-size:clamp(17px,5vw,21px);font-weight:600;line-height:1.55;color:var(--txt);margin-bottom:8px;min-height:60px;display:flex;align-items:center}
+.qhint{font-size:12.5px;color:var(--muted);line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;padding:15px 18px;background:var(--card);border:1.5px solid var(--bd);border-radius:var(--r2);cursor:pointer;transition:all .2s ease;text-align:left;font-family:var(--fn);position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);transform:scaleY(0);transition:transform .25s;border-radius:0 2px 2px 0}
+.opt:hover{border-color:var(--acc2);background:rgba(184,134,11,.03)}
+.opt:hover::before{transform:scaleY(1)}
+.opt.sel{border-color:var(--acc);background:rgba(184,134,11,.06);box-shadow:0 0 0 3px rgba(184,134,11,.1)}
+.opt.sel::before{transform:scaleY(1)}
+.orad{width:22px;height:22px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.opt.sel .orad{border-color:var(--acc)}
+.orad::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--acc);transform:scale(0);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.opt.sel .orad::after{transform:scale(1)}
+.ocont{flex:1}
+.olab{font-size:14.5px;font-weight:500;color:var(--txt);margin-bottom:1px}
+.odesc{font-size:11.5px;color:var(--muted)}
+.tnav{position:fixed;bottom:0;left:0;right:0;background:rgba(244,242,236,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--bdl);padding:12px 18px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:10px;z-index:100}
+.bnav{max-width:280px;width:45%;padding:14px 18px;border-radius:var(--r2);font-size:15px;font-weight:600;font-family:var(--fn);cursor:pointer;transition:all .2s;border:1.5px solid transparent}
+.bprev{background:var(--card);color:var(--txt2);border-color:var(--bd)}
+.bprev:hover:not(:disabled){border-color:var(--muted);color:var(--txt)}
+.bprev:disabled{opacity:.4;cursor:not-allowed}
+.bnext{background:var(--dark);color:#fff}
+.bnext:hover:not(:disabled){background:var(--dark2);transform:translateY(-1px)}
+.bnext:disabled{opacity:.4;cursor:not-allowed}
+.bsub{background:var(--acc);color:#fff}
+.bsub:hover{background:var(--acc3)}
+
+/* ===== Modal ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(20,20,40,.6);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .3s ease}
+.modal{background:var(--card);border-radius:var(--r3);padding:32px 26px;max-width:440px;width:100%;box-shadow:var(--sh3);animation:scaleIn .35s cubic-bezier(.34,1.56,.64,1);text-align:center}
+.modal-ico{width:64px;height:64px;border-radius:50%;background:rgba(184,134,11,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:28px}
+.modal h3{font-family:var(--fs);font-size:20px;font-weight:700;color:var(--txt);margin-bottom:10px}
+.modal p{font-size:14px;color:var(--txt2);line-height:1.8;margin-bottom:8px}
+.modal .warn-list{text-align:left;background:var(--bg);border-radius:var(--r1);padding:14px 16px;margin:14px 0;font-size:13px;color:var(--txt2);line-height:1.8}
+.modal .warn-list li{margin-bottom:4px;list-style:none;padding-left:18px;position:relative}
+.modal .warn-list li::before{content:'!';position:absolute;left:0;color:var(--acc);font-weight:700}
+.modal-btns{display:flex;gap:10px;margin-top:18px;justify-content:center}
+.modal-btns .btn{padding:13px 20px;font-size:14px;max-width:180px}
+
+/* ===== Result View ===== */
+.rhero{background:var(--dark);color:#fff;padding:48px 22px 40px;text-align:center;position:relative;overflow:hidden}
+.rhero::before{content:'';position:absolute;inset:-50%;background:radial-gradient(circle at 25% 15%,rgba(184,134,11,.14) 0%,transparent 40%),radial-gradient(circle at 75% 85%,rgba(46,107,138,.1) 0%,transparent 40%);pointer-events:none}
+.rhero-c{position:relative;z-index:1}
+.rlabel{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--acc2);margin-bottom:12px;font-weight:600}
+.rtitle{font-family:var(--fs);font-size:clamp(24px,7vw,34px);font-weight:900;margin-bottom:6px;line-height:1.25}
+.rsub{font-size:13px;color:rgba(255,255,255,.55);max-width:440px;margin:0 auto;line-height:1.75}
+.rmeta{display:flex;justify-content:center;gap:24px;margin-top:18px;flex-wrap:wrap}
+.rmeta-i{text-align:center}
+.rmeta-i .v{font-family:var(--fs);font-size:19px;font-weight:700;color:var(--acc2);display:block}
+.rmeta-i .l{font-size:10.5px;color:rgba(255,255,255,.45);letter-spacing:.5px}
+.rbody{max-width:720px;margin:0 auto;padding:0 18px 60px;margin-top:-28px;position:relative;z-index:2}
+
+/* Animal Card */
+.animal-card{background:linear-gradient(135deg,#fdf8f0,#f5ede0);border-radius:var(--r3);padding:28px 24px;margin-bottom:18px;border:1px solid rgba(184,134,11,.2);box-shadow:var(--sh2);position:relative;overflow:hidden}
+.animal-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(184,134,11,.06)}
+.animal-header{display:flex;align-items:center;gap:16px;margin-bottom:16px;position:relative;z-index:1}
+.animal-emoji{width:72px;height:72px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:var(--sh1);flex-shrink:0;border:2px solid rgba(184,134,11,.2)}
+.animal-info{flex:1}
+.animal-tag{font-size:11px;font-weight:600;color:var(--acc3);letter-spacing:1px;margin-bottom:4px}
+.animal-name{font-family:var(--fs);font-size:24px;font-weight:900;color:var(--txt);margin-bottom:2px}
+.animal-name-en{font-size:12px;color:var(--muted)}
+.animal-desc{font-size:13.5px;color:var(--txt2);line-height:1.85;position:relative;z-index:1}
+.animal-traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;position:relative;z-index:1}
+.animal-trait{padding:4px 12px;background:rgba(184,134,11,.1);border-radius:100px;font-size:11.5px;color:var(--acc3);font-weight:500}
+
+/* Quality */
+.qcard2{background:linear-gradient(135deg,var(--dark),var(--dark3));color:#fff;border-radius:var(--r3);padding:22px 20px;margin-bottom:18px}
+.qcard2 .st{color:#fff}.qcard2 .ss{color:rgba(255,255,255,.5)}
+.qrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.qrow:last-child{border-bottom:none}
+.qlab{font-size:13px;color:rgba(255,255,255,.7)}
+.qval{font-family:var(--fs);font-size:15px;font-weight:700;color:var(--acc2)}
+
+/* Radar */
+.rcard{background:var(--card);border-radius:var(--r3);padding:26px 18px;box-shadow:var(--sh1);border:1px solid var(--bdl);margin-bottom:18px}
+.st{font-family:var(--fs);font-size:18px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.ss{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.rcont{display:flex;justify-content:center;padding:8px 0}
+.rsvg{max-width:100%;height:auto}
+
+/* Overview */
+.ovcard{background:var(--card);border-radius:var(--r3);padding:22px 20px;box-shadow:var(--sh1);border:1px solid var(--bdl);margin-bottom:18px}
+.ovrow{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--bdl)}
+.ovrow:last-child{border-bottom:none}
+.ovl{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fs);font-size:15px;font-weight:700;flex-shrink:0}
+.ovl.o{background:var(--O)}.ovl.c{background:var(--C)}.ovl.e{background:var(--E)}.ovl.a{background:var(--A)}.ovl.n{background:var(--N)}
+.ovi{flex:1;min-width:0}
+.ovn{font-size:14px;font-weight:600;color:var(--txt);display:flex;align-items:center;gap:8px}
+.ovne{font-size:11px;color:var(--muted);font-weight:400}
+.ovbw{height:5px;background:var(--bdl);border-radius:100px;margin-top:6px;overflow:hidden}
+.ovb{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.ovb.o{background:var(--O)}.ovb.c{background:var(--C)}.ovb.e{background:var(--E)}.ovb.a{background:var(--A)}.ovb.n{background:var(--N)}
+.ovs{text-align:right;flex-shrink:0}
+.ovp{font-family:var(--fs);font-size:17px;font-weight:700;display:block}
+.ovp.o{color:var(--O)}.ovp.c{color:var(--C)}.ovp.e{color:var(--E)}.ovp.a{color:var(--A)}.ovp.n{color:var(--N)}
+.ovlv{font-size:10.5px;color:var(--muted)}
+
+/* Dimension Detail */
+.dcard{background:var(--card);border-radius:var(--r3);padding:24px 20px;box-shadow:var(--sh1);border:1px solid var(--bdl);margin-bottom:16px;animation:slideUp .4s ease}
+.dhead{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.dico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-family:var(--fs);font-size:19px;font-weight:700}
+.dico.o{background:var(--O)}.dico.c{background:var(--C)}.dico.e{background:var(--E)}.dico.a{background:var(--A)}.dico.n{background:var(--N)}
+.dinf{flex:1}
+.dnm{font-family:var(--fs);font-size:17px;font-weight:700;color:var(--txt);margin-bottom:1px}
+.dnme{font-size:11.5px;color:var(--muted);font-weight:400}
+.dsr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.dsc{font-family:var(--fs);font-size:24px;font-weight:700;min-width:44px}
+.dsc.o{color:var(--O)}.dsc.c{color:var(--C)}.dsc.e{color:var(--E)}.dsc.a{color:var(--A)}.dsc.n{color:var(--N)}
+.dpb{font-size:12px;font-weight:700;padding:3px 10px;border-radius:100px;background:rgba(184,134,11,.1);color:var(--acc3)}
+.dlv{font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:100px}
+.lv-vh{background:rgba(74,124,89,.13);color:#3a6647}.lv-h{background:rgba(74,124,89,.1);color:#4a7c59}
+.lv-m{background:rgba(184,134,11,.1);color:var(--acc3)}.lv-l{background:rgba(176,80,112,.1);color:#904060}.lv-vl{background:rgba(176,80,112,.14);color:#7a3050}
+.dbc{flex:1;height:6px;background:var(--bdl);border-radius:100px;overflow:hidden}
+.db{height:100%;border-radius:100px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.db.o{background:var(--O)}.db.c{background:var(--C)}.db.e{background:var(--E)}.db.a{background:var(--A)}.db.n{background:var(--N)}
+.ddesc{font-size:13.5px;color:var(--txt2);line-height:1.8;margin-bottom:14px}
+.ddesc strong{color:var(--txt);font-weight:600}
+.ftitle{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:10px;letter-spacing:.5px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.fitem{background:var(--bg);border-radius:var(--r1);padding:9px 6px;text-align:center}
+.fname{font-size:10.5px;color:var(--muted);margin-bottom:3px;line-height:1.3;min-height:28px;display:flex;align-items:center;justify-content:center}
+.fscore{font-family:var(--fs);font-size:15px;font-weight:700;color:var(--txt)}
+.fpct{font-size:9.5px;color:var(--muted);margin-top:1px}
+
+/* Advice */
+.acard{background:var(--card);border-radius:var(--r3);padding:24px 20px;box-shadow:var(--sh1);border:1px solid var(--bdl);margin-bottom:16px}
+.acard h4{font-family:var(--fs);font-size:16px;font-weight:700;color:var(--txt);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.acard h4 .ico{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700;flex-shrink:0}
+.atext{font-size:13.5px;color:var(--txt2);line-height:1.85}
+.atext ul{margin:6px 0 6px 18px}.atext li{margin-bottom:6px}
+.atext strong{color:var(--txt);font-weight:600}
+.ctags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.ctag{padding:5px 13px;background:rgba(184,134,11,.07);border:1px solid rgba(184,134,11,.18);border-radius:100px;font-size:12.5px;color:var(--acc3);font-weight:500}
+
+/* Career detail */
+.career-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--bdl)}
+.career-section h5{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:8px}
+.career-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.career-item{background:var(--bg);border-radius:var(--r1);padding:10px 12px;border-left:3px solid var(--acc)}
+.career-item .ci-type{font-size:11px;color:var(--muted);margin-bottom:2px}
+.career-item .ci-job{font-size:13px;font-weight:600;color:var(--txt)}
+
+.ractions{display:flex;gap:10px;margin-top:24px;justify-content:center}
+.afooter{text-align:center;padding:22px 18px 36px;font-size:10.5px;color:var(--muted);line-height:1.75}
+
+/* 生成图片遮罩 */
+.gen-overlay{position:fixed;inset:0;background:rgba(20,20,40,.7);z-index:2000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;color:#fff;animation:fadeIn .3s ease}
+.gen-overlay .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--acc2);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-img-wrap{max-width:90%;max-height:80vh;overflow:auto;border-radius:12px;background:#fff}
+.gen-img-wrap img{width:100%;display:block}
+.gen-tip{font-size:13px;color:rgba(255,255,255,.7);text-align:center;line-height:1.6}
+.gen-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+
+@media(max-width:480px){
+  .wc-stats{grid-template-columns:repeat(4,1fr);gap:7px}.sc{padding:11px 5px}.sc .num{font-size:18px}
+  .qcard{padding:22px 18px}.qtext{min-height:50px}
+  .fgrid{grid-template-columns:repeat(3,1fr);gap:5px}.fitem{padding:7px 4px}
+  .dcard{padding:20px 16px}.ractions{flex-direction:column;align-items:center}
+  .ractions .btn{max-width:280px}
+  .ob{width:46px}.ol{width:46px;height:46px;font-size:19px}
+  .ab-dims{grid-template-columns:repeat(5,1fr);gap:4px}.ab-dim{padding:8px 2px}
+  .ab-orgs{grid-template-columns:1fr 1fr;gap:8px}
+  .career-grid{grid-template-columns:1fr}
+  .animal-header{flex-direction:column;text-align:center}.animal-emoji{margin:0 auto}
+  .bnav{width:45%}
+}
+@media(min-width:768px){
+  .tb{padding:36px 22px 120px}.opts{gap:10px}.opt{padding:16px 20px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Welcome View ===== -->
+<section class="view active" id="view-welcome">
+  <div class="wc">
+    <div class="wc-bg"></div>
+    <div class="wc-hero">
+      <div class="wc-badge"><span class="dot"></span><span>IPIP-NEO 专业量表 · 公共领域</span></div>
+      <h1 class="wc-title">探索你的<br><span class="acc">人格深海</span></h1>
+      <p class="wc-sub">基于心理学界公认的大五人格模型（Five-Factor Model / OCEAN），从超过200道专业题库中随机抽取60题，全面描绘你的人格画像，并匹配专属性格动物。科学、精准、有趣。</p>
+      <div class="ocean-row">
+        <div class="ob"><div class="ol o">O</div><div class="on">开放性</div></div>
+        <div class="ob"><div class="ol c">C</div><div class="on">尽责性</div></div>
+        <div class="ob"><div class="ol e">E</div><div class="on">外向性</div></div>
+        <div class="ob"><div class="ol a">A</div><div class="on">宜人性</div></div>
+        <div class="ob"><div class="ol n">N</div><div class="on">神经质</div></div>
+      </div>
+      <div class="wc-stats">
+        <div class="sc"><span class="num">200+</span><span class="label">题库总量</span></div>
+        <div class="sc"><span class="num">60</span><span class="label">随机抽题</span></div>
+        <div class="sc"><span class="num">30</span><span class="label">子维度</span></div>
+        <div class="sc"><span class="num">8-10</span><span class="label">分钟完成</span></div>
+      </div>
+      <div class="wc-btns">
+        <button class="btn btn-dark" onclick="startTest()">进入测评<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        <button class="btn btn-outline" onclick="showView('view-about')">了解 OCEAN 测评<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></button>
+      </div>
+      <p class="wc-note">请根据真实情况作答，无对错之分 · 结果仅供自我了解<br>不构成专业心理诊断或职业建议</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About View ===== -->
+<section class="view" id="view-about">
+  <div class="ab-wrap">
+    <div class="ab-back" onclick="showView('view-welcome')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>返回首页</div>
+    <div class="ab-hero">
+      <h1>大五人格模型 OCEAN</h1>
+      <p>心理学界公认的人格分类框架，经过半个世纪的研究验证，是目前预测工作绩效、学业成就和人际关系最有效的人格模型。</p>
+    </div>
+    <div class="ab-section">
+      <h2><span class="ico" style="background:var(--O)">理</span>什么是大五人格？</h2>
+      <p>大五人格模型（Big Five Personality Model），又称<strong>五因素模型（Five-Factor Model, FFM）</strong>或 <strong>OCEAN 模型</strong>，是当代人格心理学中最具影响力的理论框架。它认为人格可以通过五个相对独立的维度来描述：<strong>开放性（Openness）、尽责性（Conscientiousness）、外向性（Extraversion）、宜人性（Agreeableness）和神经质（Neuroticism）</strong>。</p>
+      <p>与 MBTI 等类型学模型不同，大五人格是<strong>特质论模型</strong>——每个人在每个维度上都有一个连续的得分，而非非此即彼的类型划分。大量研究表明，大五人格在跨文化、跨年龄、跨性别的情境下都具有良好的信效度。</p>
+    </div>
+    <div class="ab-section">
+      <h2><span class="ico" style="background:var(--C)">维</span>五大维度详解</h2>
+      <div class="ab-dims">
+        <div class="ab-dim"><div class="l" style="background:var(--O)">O</div><div class="n">开放性</div><div class="d">想象力<br>好奇心<br>创造力</div></div>
+        <div class="ab-dim"><div class="l" style="background:var(--C)">C</div><div class="n">尽责性</div><div class="d">自律<br>组织<br>责任感</div></div>
+        <div class="ab-dim"><div class="l" style="background:var(--E)">E</div><div class="n">外向性</div><div class="d">社交<br>自信<br>活力</div></div>
+        <div class="ab-dim"><div class="l" style="background:var(--A)">A</div><div class="n">宜人性</div><div class="d">合作<br>信任<br>共情</div></div>
+        <div class="ab-dim"><div class="l" style="background:var(--N)">N</div><div class="n">神经质</div><div class="d">焦虑<br>情绪<br>敏感性</div></div>
+      </div>
+      <p style="margin-top:12px"><strong>开放性（O）</strong>：衡量对新体验、新想法和创造性活动的接纳程度。高分者好奇、富有想象力、欣赏艺术；低分者务实、传统、偏好常规。</p>
+      <p><strong>尽责性（C）</strong>：衡量自律、组织能力和目标导向行为。高分者可靠、勤奋、有条理；低分者灵活、随性、适应变化。</p>
+      <p><strong>外向性（E）</strong>：衡量社交参与度、自信和积极情绪。高分者健谈、热情、充满活力；低分者安静、内敛、深度思考。</p>
+      <p><strong>宜人性（A）</strong>：衡量合作、信任和对他人的关心。高分者友善、共情、乐于助人；低分者直接、竞争、坚持立场。</p>
+      <p><strong>神经质（N）</strong>：衡量对压力和负面情绪的敏感程度。高分者情绪敏感、容易焦虑；低分者情绪稳定、抗压能力强。</p>
+    </div>
+    <div class="ab-section">
+      <h2><span class="ico" style="background:var(--E)">史</span>发展历程与学术验证</h2>
+      <div class="ab-timeline">
+        <div class="ab-tl-item"><div class="ab-tl-year">1930s-1940s</div><div class="ab-tl-text">Gordon Allport 和 Henry Odbert 从词典中筛选出约18,000个描述人格的词汇，开创了词汇学研究范式。</div></div>
+        <div class="ab-tl-item"><div class="ab-tl-year">1949</div><div class="ab-tl-text">Donald Fiske 首次通过因子分析提取出五个相对稳定的人格因素。</div></div>
+        <div class="ab-tl-item"><div class="ab-tl-year">1961</div><div class="ab-tl-text">Tupes 和 Christal 在空军样本中重复验证了五因素结构，被称为"空军五因素"。</div></div>
+        <div class="ab-tl-item"><div class="ab-tl-year">1980s</div><div class="ab-tl-text">Robert McCrae 和 Paul Costa 开发 NEO-PI 量表，正式确立大五人格框架，并进行了大量跨文化验证。</div></div>
+        <div class="ab-tl-item"><div class="ab-tl-year">1990s</div><div class="ab-tl-text">Lewis Goldberg 创立国际人格项目库（IPIP），将大五人格题目放入公共领域，推动了全球范围内的研究和应用。</div></div>
+        <div class="ab-tl-item"><div class="ab-tl-year">2017</div><div class="ab-tl-text">Soto 和 John 发布 BFI-2 量表，在大五维度下建立15个子维度，进一步提升了测量精度。</div></div>
+      </div>
+      <div class="ab-quote">"大五人格模型是人格心理学领域的重大突破，它提供了一个全面、可靠且具有预测力的框架，来理解人类行为的个体差异。"<span class="author">— McCrae & Costa, 1997</span></div>
+    </div>
+    <div class="ab-section">
+      <h2><span class="ico" style="background:var(--A)">权</span>学术机构与权威性</h2>
+      <p>本测评基于以下学术机构和研究成果编制，确保科学性和专业性：</p>
+      <div class="ab-orgs">
+        <div class="ab-org"><div class="logo" style="background:var(--O)">APA</div><div class="name">美国心理学会</div><div class="desc">American Psychological Association，全球最大的心理学专业组织</div></div>
+        <div class="ab-org"><div class="logo" style="background:var(--C)">IPIP</div><div class="name">国际人格项目库</div><div class="desc">International Personality Item Pool，公共领域人格题库</div></div>
+        <div class="ab-org"><div class="logo" style="background:var(--E)">JPSP</div><div class="name">人格与社会心理学杂志</div><div class="desc">Journal of Personality and Social Psychology，领域顶刊</div></div>
+        <div class="ab-org"><div class="logo" style="background:var(--N)">NEO</div><div class="name">NEO-PI-R 量表</div><div class="desc">McCrae & Costa 开发，大五人格经典测量工具</div></div>
+      </div>
+      <p style="margin-top:14px"><strong>信效度说明</strong>：大五人格量表的内部一致性信度（Cronbach's α）通常在 0.75-0.90 之间，重测信度在 0.70-0.85 之间。大量元分析研究表明，尽责性是预测工作绩效最稳定的人格指标，外向性预测领导力和销售绩效，宜人性预测团队协作和客户满意度。</p>
+    </div>
+    <div class="ab-section">
+      <h2><span class="ico" style="background:var(--acc)">测</span>本测评的技术特点</h2>
+      <p><strong>题库规模</strong>：整合 IPIP-NEO-120、BFI-2 及 IPIP Big-Five Factor Markers 等多个经过验证的公共领域量表，构建超过200题的综合题库。</p>
+      <p><strong>随机抽题</strong>：每次测评从题库中按维度随机抽取60题（每维度12题），确保每位用户的题目组合都不同，减少练习效应和题目泄露影响。</p>
+      <p><strong>反向计分</strong>：每个维度包含正向和反向计分题目，有效控制社会赞许性偏差（即"装好"倾向）。</p>
+      <p><strong>质量检测</strong>：内置作答质量检测机制，包括直线作答检测、答题速度检测和答案多样性检测，确保结果的有效性。</p>
+      <p><strong>多维解析</strong>：不仅提供五大维度得分，还深入解析30个子维度，并结合中国本土的动物性格测评传统，为你匹配专属性格动物。</p>
+    </div>
+    <div style="text-align:center;margin-top:28px">
+      <button class="btn btn-dark" style="max-width:300px" onclick="startTest()">开始我的测评</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Test View ===== -->
+<section class="view" id="view-test">
+  <div class="th">
+    <div class="th-row">
+      <div class="th-label"><span class="cur" id="q-current">1</span><span class="tot"> / <span id="q-total">60</span></span></div>
+      <button class="th-exit" onclick="exitTest()">退出</button>
+    </div>
+    <div class="auto-tip"><span class="dot"></span>选择答案后将自动跳转下一题</div>
+    <div class="pbar"><div class="pfill" id="progress-fill" style="width:1.67%"></div></div>
+  </div>
+  <div class="tb">
+    <div class="qcard" id="question-card">
+      <div class="qmeta"><span class="qnum" id="q-num">第 1 题</span><span class="qstem">以下描述在多大程度上符合你？</span></div>
+      <div class="qtext" id="question-text">加载中...</div>
+      <div class="qhint">请按照你当前的实际情况描述自己，而不是你希望自己未来能成为的样子</div>
+    </div>
+    <div class="opts" id="options-list"></div>
+  </div>
+  <div class="tnav">
+    <button class="bnav bprev" id="btn-prev" onclick="prevQuestion()" disabled>上一题</button>
+    <button class="bnav bnext" id="btn-next" onclick="nextQuestion()" disabled>下一题</button>
+  </div>
+</section>
+
+<!-- ===== Result View ===== -->
+<section class="view" id="view-result">
+  <div id="report-content">
+    <div class="rhero">
+      <div class="rhero-c">
+        <div class="rlabel">Personality Profile Report</div>
+        <h2 class="rtitle" id="result-title">你的人格画像报告</h2>
+        <p class="rsub" id="result-subtitle">基于大五人格模型的综合分析</p>
+        <div class="rmeta">
+          <div class="rmeta-i"><span class="v" id="meta-answered">60</span><span class="l">已答题数</span></div>
+          <div class="rmeta-i"><span class="v" id="meta-time">--</span><span class="l">用时</span></div>
+          <div class="rmeta-i"><span class="v" id="meta-quality">--</span><span class="l">作答质量</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="rbody">
+      <div class="animal-card" id="animal-card"></div>
+      <div class="qcard2">
+        <h3 class="st">作答质量检测</h3>
+        <p class="ss">测评信效度保障机制</p>
+        <div id="quality-rows"></div>
+      </div>
+      <div class="rcard">
+        <h3 class="st">五维人格雷达图</h3>
+        <p class="ss">五大维度得分概览（百分比制）</p>
+        <div class="rcont"><svg class="rsvg" id="radar-svg" viewBox="0 0 400 400" width="360" height="360"></svg></div>
+      </div>
+      <div class="ovcard">
+        <h3 class="st">维度总览</h3>
+        <p class="ss">各维度百分比与等级评定</p>
+        <div id="overview-rows"></div>
+      </div>
+      <div id="dimension-details"></div>
+      <div class="acard">
+        <h4><span class="ico" style="background:var(--acc)">职</span>职业发展与就业方向</h4>
+        <div class="atext" id="career-advice"></div>
+        <div class="ctags" id="career-tags"></div>
+      </div>
+      <div class="acard">
+        <h4><span class="ico" style="background:var(--A)">关</span>人际关系与沟通</h4>
+        <div class="atext" id="relation-advice"></div>
+      </div>
+      <div class="acard">
+        <h4><span class="ico" style="background:var(--C)">发</span>成长与发展建议</h4>
+        <div class="atext" id="growth-advice"></div>
+      </div>
+      <div class="acard">
+        <h4><span class="ico" style="background:var(--N)">心</span>心理健康提示</h4>
+        <div class="atext" id="mental-advice"></div>
+      </div>
+      <div class="afooter">
+        本测评基于 IPIP-NEO-120 (Johnson, 2014) 及 BFI-2 (Soto & John, 2017) 公共领域量表编制<br>
+        International Personality Item Pool — ipip.ori.org<br>
+        结果仅供自我了解参考，不构成专业心理诊断或职业建议
+      </div>
+    </div>
+  </div>
+  <div class="ractions">
+    <button class="btn btn-outline" onclick="restartTest()">再测一次</button>
+    <button class="btn btn-dark" onclick="generateImage()">保存报告(生成长图)</button>
+  </div>
+  <div style="height:24px"></div>
+</section>
+
+<div id="modal-container"></div>
+
+<script>
+// 题库：每维度约42-44题，总计200+
+const BANK={
+N:[
+{t:"为很多事情感到担心",r:false,f:"anxiety"},{t:"很容易生气",r:false,f:"anger"},{t:"时常感到忧郁",r:false,f:"depression"},
+{t:"感觉自己很难接近别人",r:false,f:"self_consciousness"},{t:"会大吃大喝、寻欢作乐",r:false,f:"immoderation"},{t:"容易慌张",r:false,f:"vulnerability"},
+{t:"担心会发生最糟糕的情况",r:false,f:"anxiety"},{t:"容易被激怒",r:false,f:"anger"},{t:"不喜欢自己",r:false,f:"depression"},
+{t:"害怕引起他人的注意",r:false,f:"self_consciousness"},{t:"很少过度放纵自己",r:true,f:"immoderation"},{t:"感到被各种事情压得喘不过气来",r:false,f:"vulnerability"},
+{t:"对很多事情感到害怕",r:false,f:"anxiety"},{t:"会发脾气",r:false,f:"anger"},{t:"经常情绪低落",r:false,f:"depression"},
+{t:"只有和朋友在一起的时候才会感到自在",r:false,f:"self_consciousness"},{t:"能轻松抵御诱惑",r:true,f:"immoderation"},{t:"感觉自己处理事情力不从心",r:false,f:"vulnerability"},
+{t:"很容易觉得压力大",r:false,f:"anxiety"},{t:"不会轻易被惹恼",r:true,f:"anger"},{t:"对自己感到满意",r:true,f:"depression"},
+{t:"不会被复杂的社交情境所困扰",r:true,f:"self_consciousness"},{t:"可以控制自己的欲望",r:true,f:"immoderation"},{t:"在压力下能保持冷静",r:true,f:"vulnerability"},
+{t:"我很少感到焦虑或害怕",r:true,f:"anxiety"},{t:"我能很好地控制自己的情绪",r:true,f:"anger"},{t:"经历挫折后我仍保持乐观",r:true,f:"depression"},
+{t:"我在陌生人面前感到自在",r:true,f:"self_consciousness"},{t:"我很少冲动行事",r:true,f:"immoderation"},{t:"面对危机我能保持镇定",r:true,f:"vulnerability"},
+{t:"我经常感到紧张不安",r:false,f:"anxiety"},{t:"我有时会对别人发火",r:false,f:"anger"},{t:"我经常感到孤独",r:false,f:"depression"},
+{t:"在公众场合发言我会感到紧张",r:false,f:"self_consciousness"},{t:"我有时会过度消费",r:false,f:"immoderation"},{t:"遇到困难我容易感到无助",r:false,f:"vulnerability"},
+{t:"我是一个放松的人，能很好地应对压力",r:true,f:"anxiety"},{t:"我通常脾气温和",r:true,f:"anger"},{t:"我很少感到悲伤",r:true,f:"depression"},
+{t:"我在社交场合感到自信",r:true,f:"self_consciousness"},{t:"我能抵制大多数诱惑",r:true,f:"immoderation"},{t:"我在压力下不容易崩溃",r:true,f:"vulnerability"}
+],
+E:[
+{t:"很容易交到朋友",r:false,f:"friendliness"},{t:"喜欢参加大型聚会",r:false,f:"gregariousness"},{t:"承担责任、掌控局面",r:false,f:"assertiveness"},
+{t:"总是很忙碌",r:false,f:"activity"},{t:"喜欢追求刺激",r:false,f:"excitement_seeking"},{t:"我的快乐会感染周围的人",r:false,f:"cheerfulness"},
+{t:"和其他人待在一起时觉得很自在",r:false,f:"friendliness"},{t:"在聚会上会和很多不同的人交谈",r:false,f:"gregariousness"},{t:"会尝试去领导他人",r:false,f:"assertiveness"},
+{t:"总是在奔波",r:false,f:"activity"},{t:"喜欢冒险",r:false,f:"excitement_seeking"},{t:"我的生活很快乐",r:false,f:"cheerfulness"},
+{t:"避免和他人接触",r:true,f:"friendliness"},{t:"更喜欢一个人独处",r:true,f:"gregariousness"},{t:"等着别人来带头",r:true,f:"assertiveness"},
+{t:"喜欢慢慢来",r:true,f:"activity"},{t:"喜欢不计后果地行事",r:false,f:"excitement_seeking"},{t:"热爱生活",r:false,f:"cheerfulness"},
+{t:"和他人保持距离",r:true,f:"friendliness"},{t:"避开人多的地方",r:true,f:"gregariousness"},{t:"行为狂放不羁",r:false,f:"excitement_seeking"},{t:"看到生活中好的一面",r:false,f:"cheerfulness"},
+{t:"我外向、善于交际",r:false,f:"friendliness"},{t:"我性格坚定、有主见",r:false,f:"assertiveness"},{t:"我充满活力",r:false,f:"activity"},{t:"我表现出很高的热情",r:false,f:"cheerfulness"},
+{t:"我倾向于安静",r:true,f:"gregariousness"},{t:"我有时害羞、内向",r:true,f:"friendliness"},{t:"我发现很难影响别人",r:true,f:"assertiveness"},
+{t:"我比其他人更不活跃",r:true,f:"activity"},{t:"我很少感到兴奋或充满渴望",r:true,f:"cheerfulness"},{t:"我健谈、话多",r:false,f:"gregariousness"},
+{t:"我更喜欢让别人来负责",r:true,f:"assertiveness"},{t:"我总是忙个不停",r:false,f:"activity"},{t:"我是聚会的灵魂人物",r:false,f:"gregariousness"},
+{t:"我喜欢成为关注的焦点",r:false,f:"assertiveness"},{t:"我精力充沛",r:false,f:"activity"},{t:"我经常笑",r:false,f:"cheerfulness"},
+{t:"我在人群中感到充满能量",r:false,f:"friendliness"},{t:"我主动发起对话",r:false,f:"friendliness"},{t:"我喜欢快节奏的生活",r:false,f:"activity"},
+{t:"我寻求新的和令人兴奋的体验",r:false,f:"excitement_seeking"},{t:"我对未来充满乐观",r:false,f:"cheerfulness"}
+],
+O:[
+{t:"有丰富的想象力",r:false,f:"imagination"},{t:"认为艺术是很重要的",r:false,f:"artistic"},{t:"能强烈感受到自己的情绪",r:false,f:"emotionality"},
+{t:"相比墨守成规，更喜欢有变化",r:false,f:"adventurousness"},{t:"喜欢阅读有挑战性的材料",r:false,f:"intellect"},{t:"认为自己在政治方面非常自由开放",r:false,f:"liberalism"},
+{t:"喜欢天马行空地幻想",r:false,f:"imagination"},{t:"能发现别人看不到的美",r:false,f:"artistic"},{t:"能感受到他人的情绪",r:false,f:"emotionality"},
+{t:"更喜欢做自己熟悉的事情",r:true,f:"adventurousness"},{t:"会避免参与关于哲学的讨论",r:true,f:"intellect"},{t:"相信没有绝对的对错之分",r:false,f:"liberalism"},
+{t:"喜欢做白日梦",r:false,f:"imagination"},{t:"不喜欢诗歌",r:true,f:"artistic"},{t:"很少察觉到自己的情绪反应",r:true,f:"emotionality"},
+{t:"不喜欢改变",r:true,f:"adventurousness"},{t:"理解抽象概念对我来说有些困难",r:true,f:"intellect"},{t:"在政治上比较保守",r:true,f:"liberalism"},
+{t:"喜欢陷入沉思",r:false,f:"imagination"},{t:"不喜欢去美术馆",r:true,f:"artistic"},{t:"不理解那些情绪化的人",r:true,f:"emotionality"},
+{t:"喜欢传统的方式",r:true,f:"adventurousness"},{t:"对理论性的讨论不感兴趣",r:true,f:"intellect"},{t:"认为应该严惩犯罪",r:true,f:"liberalism"},
+{t:"我对很多不同的事物感到好奇",r:false,f:"intellect"},{t:"我有创造力，能找到聪明的做事方法",r:false,f:"imagination"},{t:"我对艺术、音乐或文学着迷",r:false,f:"artistic"},
+{t:"我是一个复杂、深刻的思考者",r:false,f:"intellect"},{t:"我原创，能想出新点子",r:false,f:"imagination"},{t:"我重视艺术和美",r:false,f:"artistic"},
+{t:"我几乎没有艺术方面的兴趣",r:true,f:"artistic"},{t:"我几乎没有创造力",r:true,f:"imagination"},{t:"我认为诗歌和戏剧很无聊",r:true,f:"artistic"},
+{t:"我对抽象的想法几乎没有兴趣",r:true,f:"intellect"},{t:"我难以想象事物",r:true,f:"imagination"},{t:"我喜欢尝试新事物",r:false,f:"adventurousness"},
+{t:"我喜欢去陌生的地方旅行",r:false,f:"adventurousness"},{t:"我经常反思自己的情感",r:false,f:"emotionality"},{t:"我对各种文化和生活方式持开放态度",r:false,f:"liberalism"},
+{t:"我喜欢思考抽象的概念",r:false,f:"intellect"},{t:"我的想象力丰富",r:false,f:"imagination"},{t:"我欣赏美学体验",r:false,f:"artistic"},
+{t:"我愿意挑战传统观念",r:false,f:"liberalism"},{t:"我对新知识充满渴望",r:false,f:"intellect"}
+],
+A:[
+{t:"信任其他人",r:false,f:"trust"},{t:"会利用他人来达成自己的目的",r:true,f:"morality"},{t:"乐于帮助他人",r:false,f:"altruism"},
+{t:"喜欢和别人比试",r:true,f:"cooperation"},{t:"相信自己比别人更好",r:true,f:"modesty"},{t:"同情流浪汉",r:false,f:"sympathy"},
+{t:"相信他人的出发点是好的",r:false,f:"trust"},{t:"为了领先别人会采用作弊的方式",r:true,f:"morality"},{t:"关心他人",r:false,f:"altruism"},
+{t:"会冲人大喊大叫",r:true,f:"cooperation"},{t:"觉得自己很了不起",r:true,f:"modesty"},{t:"同情那些处境不如自己的人",r:false,f:"sympathy"},
+{t:"相信他人说的话",r:false,f:"trust"},{t:"占别人的便宜",r:true,f:"morality"},{t:"对他人的感受漠不关心",r:true,f:"altruism"},
+{t:"侮辱他人",r:true,f:"cooperation"},{t:"对自己的评价很高",r:true,f:"modesty"},{t:"对别人遇到的麻烦事不感兴趣",r:true,f:"sympathy"},
+{t:"不相信别人",r:true,f:"trust"},{t:"给别人使坏",r:true,f:"morality"},{t:"不愿为他人花费时间",r:true,f:"altruism"},
+{t:"报复别人",r:true,f:"cooperation"},{t:"吹嘘自己的美德",r:true,f:"modesty"},{t:"尽量不去想那些需要帮助的人",r:true,f:"sympathy"},
+{t:"我有同情心，心地柔软",r:false,f:"altruism"},{t:"我尊重他人，以礼相待",r:false,f:"cooperation"},{t:"我天性宽容、容易原谅",r:false,f:"sympathy"},
+{t:"我乐于助人，对他人无私",r:false,f:"altruism"},{t:"我对别人有礼貌、谦恭",r:false,f:"cooperation"},{t:"我总是对人持最好的假设",r:false,f:"trust"},
+{t:"我倾向于挑别人的毛病",r:true,f:"trust"},{t:"我对别人几乎没有同情心",r:true,f:"altruism"},{t:"我与别人挑起争论",r:true,f:"cooperation"},
+{t:"我怀疑别人的意图",r:true,f:"trust"},{t:"我可能冷漠、不关心他人",r:true,f:"altruism"},{t:"我信任大多数人",r:false,f:"trust"},
+{t:"我诚实待人",r:false,f:"morality"},{t:"我愿意为他人牺牲自己的利益",r:false,f:"altruism"},{t:"我避免与他人发生冲突",r:false,f:"cooperation"},
+{t:"我谦虚，不张扬",r:false,f:"modesty"},{t:"我对弱者有同情心",r:false,f:"sympathy"},{t:"我相信人性本善",r:false,f:"trust"},
+{t:"我遵守承诺",r:false,f:"morality"},{t:"我主动帮助有困难的人",r:false,f:"altruism"}
+],
+C:[
+{t:"能成功完成任务",r:false,f:"self_efficacy"},{t:"喜欢整洁",r:false,f:"orderliness"},{t:"信守承诺",r:false,f:"dutifulness"},
+{t:"工作努力",r:false,f:"achievement"},{t:"总是有所准备",r:false,f:"self_discipline"},{t:"会不经过思考就开始行动",r:true,f:"cautiousness"},
+{t:"在自己所从事的领域出类拔萃",r:false,f:"self_efficacy"},{t:"经常忘记把东西放回原处",r:true,f:"orderliness"},{t:"会实话实说",r:false,f:"dutifulness"},
+{t:"会超出预期地完成任务",r:false,f:"achievement"},{t:"能执行自己制定的计划",r:false,f:"self_discipline"},{t:"会做出草率的决定",r:true,f:"cautiousness"},
+{t:"能轻松完成任务",r:false,f:"self_efficacy"},{t:"我的房间很乱",r:true,f:"orderliness"},{t:"破坏规则",r:true,f:"dutifulness"},
+{t:"在工作或学习上不会多做，过得去就行",r:true,f:"achievement"},{t:"浪费时间",r:true,f:"self_discipline"},{t:"仓促行事",r:true,f:"cautiousness"},
+{t:"知道如何完成任务",r:false,f:"self_efficacy"},{t:"我的东西放得到处都是",r:true,f:"orderliness"},{t:"违背自己的承诺",r:true,f:"dutifulness"},
+{t:"对工作或学业不怎么投入时间和精力",r:true,f:"achievement"},{t:"拖很久才开始做一件事",r:true,f:"self_discipline"},{t:"做事不经过思考",r:true,f:"cautiousness"},
+{t:"我可靠、稳重",r:false,f:"dutifulness"},{t:"我有条理，喜欢保持秩序",r:false,f:"orderliness"},{t:"我高效，能把事情做完",r:false,f:"achievement"},
+{t:"我可靠，总能被信赖",r:false,f:"dutifulness"},{t:"我坚持不懈，直到任务完成",r:false,f:"self_discipline"},{t:"我倾向于杂乱无章",r:true,f:"orderliness"},
+{t:"我倾向于懒惰",r:true,f:"achievement"},{t:"我开始做任务时有困难",r:true,f:"self_discipline"},{t:"我可能有些粗心大意",r:true,f:"cautiousness"},
+{t:"我保持东西整洁有序",r:false,f:"orderliness"},{t:"我有时行为不负责任",r:true,f:"dutifulness"},{t:"我总是按时完成任务",r:false,f:"achievement"},
+{t:"我注重细节",r:false,f:"orderliness"},{t:"我遵守规则和规定",r:false,f:"dutifulness"},{t:"我设定目标并坚持实现它们",r:false,f:"achievement"},
+{t:"我能够自律",r:false,f:"self_discipline"},{t:"我在行动前仔细思考",r:false,f:"cautiousness"},{t:"我对自己的工作质量感到自豪",r:false,f:"achievement"},
+{t:"我提前计划，不拖延",r:false,f:"self_discipline"},{t:"我谨慎地做出决定",r:false,f:"cautiousness"}
+]};
+
+const DOMAINS={
+N:{name:"神经质",nameEn:"Neuroticism",color:"#6a5a9a",letter:"N",facets:{anxiety:"焦虑",anger:"愤怒",depression:"抑郁",self_consciousness:"自我意识",immoderation:"无节制",vulnerability:"脆弱"}},
+E:{name:"外向性",nameEn:"Extraversion",color:"#c4922a",letter:"E",facets:{friendliness:"友善",gregariousness:"合群",assertiveness:"自信",activity:"活跃",excitement_seeking:"刺激寻求",cheerfulness:"乐观"}},
+O:{name:"开放性",nameEn:"Openness",color:"#2e6b8a",letter:"O",facets:{imagination:"想象力",artistic:"艺术兴趣",emotionality:"情感",adventurousness:"冒险",intellect:"智力",liberalism:"自由主义"}},
+A:{name:"宜人性",nameEn:"Agreeableness",color:"#b05070",letter:"A",facets:{trust:"信任",morality:"道德",altruism:"利他",cooperation:"合作",modesty:"谦虚",sympathy:"同情"}},
+C:{name:"尽责性",nameEn:"Conscientiousness",color:"#4a7c59",letter:"C",facets:{self_efficacy:"自我效能",orderliness:"秩序",dutifulness:"责任感",achievement:"成就追求",self_discipline:"自律",cautiousness:"谨慎"}}
+};
+
+const OPTIONS=[
+{v:1,l:"非常不准确",d:"完全不符合我"},{v:2,l:"不太准确",d:"大部分不符合"},{v:3,l:"适中",d:"不确定或两者皆有"},{v:4,l:"比较准确",d:"大部分符合"},{v:5,l:"非常准确",d:"完全符合我"}
+];
+
+const ANIMALS=[
+{name:"狮子",nameEn:"Lion",emoji:"🦁",tag:"天生领导者",desc:"你像狮子一样，天生具有领导气质和王者风范。你自信、果断、有担当，在团队中自然成为核心人物。你不畏惧挑战，敢于在关键时刻做出决策并承担责任。你的威严和魄力让他人信服，但也要注意倾听他人意见，避免过于独断。",traits:["领导力","自信果断","有担当","威严","目标导向"],match:p=>p.E>=65&&p.C>=60&&p.A<=50},
+{name:"老虎",nameEn:"Tiger",emoji:"🐯",tag:"强势竞争者",desc:"你像老虎一样，充满力量和竞争意识。你目标明确、行动果断，不达目的誓不罢休。你独立、自信，不喜欢被规则束缚，在竞争激烈的环境中如鱼得水。你的果敢和魄力令人敬畏，但需要注意在追求目标的过程中兼顾他人感受。",traits:["竞争力","果敢独立","目标明确","力量感","高效率"],match:p=>p.E>=60&&p.A<=45&&p.C>=55&&p.N<=45},
+{name:"海豚",nameEn:"Dolphin",emoji:"🐬",tag:"社交创意者",desc:"你像海豚一样，聪明、友善、充满创造力。你善于社交，能轻松与各种人建立连接，是团队中的氛围制造者。你的思维活跃，总能提出新颖的想法和解决方案。你乐观开朗，用积极的态度感染身边的人，但有时需要注意将创意落地执行。",traits:["社交达人","聪明创意","乐观开朗","善于沟通","灵活应变"],match:p=>p.E>=65&&p.A>=60&&p.O>=60},
+{name:"大象",nameEn:"Elephant",emoji:"🐘",tag:"可靠守护者",desc:"你像大象一样，稳重、可靠、有耐心。你是团队中最值得信赖的存在，总能默默承担责任并坚持到底。你关心他人，有强烈的家庭和集体观念，在关键时刻能给予他人坚定的支持。你的稳健和忠诚令人安心，但有时可以尝试更灵活地应对变化。",traits:["稳重可靠","忠诚耐心","关心他人","有担当","坚持到底"],match:p=>p.E<=45&&p.A>=60&&p.C>=60},
+{name:"猫头鹰",nameEn:"Owl",emoji:"🦉",tag:"严谨分析者",desc:"你像猫头鹰一样，敏锐、深邃、善于思考。你具有极强的分析能力和细节洞察力，总能看到别人忽略的问题。你独立思考，不随波逐流，在需要精确和深度的领域表现卓越。你的智慧和严谨令人钦佩，但要注意不要过度分析而错失行动时机。",traits:["分析力强","注重细节","独立思考","严谨精确","深度洞察"],match:p=>p.O>=65&&p.C>=60&&p.E<=45&&p.A<=50},
+{name:"狼",nameEn:"Wolf",emoji:"🐺",tag:"独立执行者",desc:"你像狼一样，独立、坚韧、目标明确。你有强大的自律能力和执行力，一旦确定目标就会坚持不懈地追求。你不喜欢依赖他人，习惯独立解决问题，在压力下表现出色。你的坚韧和独立令人敬佩，但要学会在适当的时候寻求帮助和团队协作。",traits:["独立坚韧","自律执行","目标明确","抗压能力","孤独行者"],match:p=>p.C>=65&&p.E<=45&&p.A<=50&&p.N<=45},
+{name:"猫",nameEn:"Cat",emoji:"🐱",tag:"敏感艺术家",desc:"你像猫一样，优雅、敏感、富有艺术气质。你有丰富的内心世界和深刻的情感体验，对美和艺术有独特的鉴赏力。你独立、有主见，不喜欢被束缚，在创造性领域能发挥独特才华。你的敏感和细腻是创造力的源泉，但要注意情绪管理，避免过度内耗。",traits:["敏感细腻","艺术气质","独立优雅","内心丰富","创造力强"],match:p=>p.O>=65&&p.N>=55&&p.E<=50},
+{name:"狐狸",nameEn:"Fox",emoji:"🦊",tag:"聪慧灵活者",desc:"你像狐狸一样，聪明、机敏、善于应变。你有极强的适应能力和学习能力，能在复杂的环境中迅速找到最优解。你思维活跃，足智多谋，善于发现机会并抓住它。你的聪慧和灵活令人赞叹，但要注意在追求效率的同时保持原则和底线。",traits:["聪明机敏","适应力强","足智多谋","灵活应变","善于学习"],match:p=>p.O>=60&&p.E>=55&&p.C<=50},
+{name:"金毛犬",nameEn:"Golden Retriever",emoji:"🐕",tag:"热情友善者",desc:"你像金毛犬一样，热情、友善、充满亲和力。你天生喜欢与人交往，总能用温暖和善意打动他人。你乐观开朗，对生活充满热情，是团队中的快乐源泉。你的友善和热情让你拥有广泛的人脉，但要注意在照顾他人的同时也关注自己的需求。",traits:["热情友善","乐观开朗","亲和力强","忠诚陪伴","社交达人"],match:p=>p.E>=65&&p.A>=65&&p.C<=55},
+{name:"熊猫",nameEn:"Panda",emoji:"🐼",tag:"温和随遇而安者",desc:"你像熊猫一样，温和、可爱、随遇而安。你不喜欢冲突和竞争，更享受平静安逸的生活。你友善、随和，能与各种人和睦相处，是团队中的和平缔造者。你的温和和包容令人感到舒适，但要注意在需要争取的时候勇敢表达自己的立场。",traits:["温和友善","随遇而安","和平主义","包容随和","享受当下"],match:p=>p.E<=45&&p.A>=60&&p.C<=50&&p.N<=45},
+{name:"牛",nameEn:"Ox",emoji:"🐂",tag:"勤劳稳健者",desc:"你像牛一样，勤劳、踏实、坚韧不拔。你有极强的责任感和耐力，能默默无闻地承担繁重的工作并坚持到底。你务实、可靠，不喜欢投机取巧，用实力和努力赢得他人尊重。你的勤劳和稳健是成功的基石，但要注意劳逸结合，不要过度劳累。",traits:["勤劳踏实","坚韧不拔","务实可靠","责任感强","耐力出众"],match:p=>p.C>=70&&p.E<=45&&p.O<=50},
+{name:"鹰",nameEn:"Eagle",emoji:"🦅",tag:"远见决策者",desc:"你像鹰一样，有远见、有格局、行动果断。你能从宏观角度看问题，洞察趋势和机会，在复杂的局面中做出精准判断。你自信、独立，有强烈的成就动机，追求卓越。你的远见和果断让你在战略层面表现出色，但要注意在执行细节上保持耐心。",traits:["远见卓识","行动果断","战略思维","追求卓越","独立自信"],match:p=>p.E>=60&&p.O>=60&&p.C>=55&&p.A<=50},
+{name:"猴子",nameEn:"Monkey",emoji:"🐵",tag:"机智灵活者",desc:"你像猴子一样，机智、活泼、善于应变。你思维敏捷，反应迅速，能在变化的环境中快速找到解决方案。你好奇心强，学习能力出众，喜欢尝试新事物。你的机智和灵活让你在多变的环境中脱颖而出，但要注意培养专注力和坚持性。",traits:["机智活泼","反应敏捷","好奇心强","善于应变","学习力强"],match:p=>p.E>=60&&p.O>=60&&p.C<=45},
+{name:"乌龟",nameEn:"Turtle",emoji:"🐢",tag:"沉稳坚持者",desc:"你像乌龟一样，沉稳、耐心、坚持不懈。你不急于求成，相信厚积薄发的力量，用持续的努力最终达成目标。你情绪稳定，抗压能力强，在动荡中保持内心的平静。你的沉稳和坚持是长期成功的保障，但要注意在快速变化的环境中适当提升反应速度。",traits:["沉稳耐心","坚持不懈","情绪稳定","厚积薄发","抗压能力"],match:p=>p.N<=35&&p.C>=60&&p.E<=50},
+{name:"孔雀",nameEn:"Peacock",emoji:"🦚",tag:"魅力表现者",desc:"你像孔雀一样，自信、优雅、富有魅力。你天生具有表现欲和感染力，能在人群中脱颖而出，成为关注的焦点。你有审美眼光，注重形象和品质，用个人魅力影响他人。你的自信和魅力是宝贵的资产，但要注意在展现自我的同时也给予他人展示的空间。",traits:["自信优雅","富有魅力","表现欲强","审美出众","感染力强"],match:p=>p.E>=70&&p.O>=55&&p.A>=50&&p.N<=45},
+{name:"蜜蜂",nameEn:"Bee",emoji:"🐝",tag:"勤奋协作者",desc:"你像蜜蜂一样，勤劳、高效、善于协作。你有极强的团队精神和执行力，能在集体中发挥重要作用。你勤奋、有条理，用持续的努力创造价值。你的协作精神和勤劳品质让你成为团队中不可或缺的一员，但要注意在忙碌中也关注自己的身心健康。",traits:["勤劳高效","团队协作","有条理","持续努力","集体意识"],match:p=>p.C>=65&&p.A>=60&&p.E<=55},
+{name:"鲸鱼",nameEn:"Whale",emoji:"🐋",tag:"深邃思考者",desc:"你像鲸鱼一样，深邃、智慧、有内涵。你有丰富的内心世界和深刻的思考能力，不喜欢肤浅的交流，更追求思想的碰撞和深度的连接。你温和、包容，有强大的内在力量。你的深邃和智慧令人敬佩，但要注意将内在的思考转化为外在的行动和表达。",traits:["深邃智慧","内心丰富","温和包容","深度思考","内在力量"],match:p=>p.O>=65&&p.A>=55&&p.E<=45&&p.N>=50},
+{name:"猎豹",nameEn:"Cheetah",emoji:"🐆",tag:"高效行动者",desc:"你像猎豹一样，敏捷、高效、行动迅速。你有极强的执行力和目标感，一旦锁定目标就会以最快的速度达成。你自信、果断，不喜欢拖泥带水，在快节奏的环境中表现出色。你的高效和果断令人惊叹，但要注意在冲刺之后适当休息，保持长期的可持续性。",traits:["敏捷高效","行动迅速","目标感强","自信果断","快节奏"],match:p=>p.E>=60&&p.C>=60&&p.A<=50&&p.N<=40},
+{name:"树懒",nameEn:"Sloth",emoji:"🦥",tag:"悠闲自在者",desc:"你像树懒一样，悠闲、自在、享受当下。你不喜欢快节奏和高压力，更享受慢生活的美好。你心态平和，不容易被外界干扰，有自己独特的生活节奏。你的悠闲和从容是一种难得的生活智慧，但要注意在重要的事情上保持必要的行动力和责任感。",traits:["悠闲自在","心态平和","享受当下","慢生活","从容不迫"],match:p=>p.C<=40&&p.E<=45&&p.N<=40},
+{name:"企鹅",nameEn:"Penguin",emoji:"🐧",tag:"团队协作者",desc:"你像企鹅一样，团结、守纪、善于协作。你有强烈的团队意识和集体荣誉感，能在团队中发挥重要作用。你可靠、有纪律性，用自己的方式为集体贡献力量。你的协作精神和可靠性令人信赖，但要注意在团队中也勇敢表达自己的独特想法。",traits:["团结协作","守纪可靠","集体意识","适应力强","默默奉献"],match:p=>p.C>=60&&p.A>=60&&p.E>=45&&p.E<=60}
+];
+
+let state={currentIndex:0,answers:{},selectedQuestions:[],startTime:null,navDir:'next'};
+
+function shuffleArray(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function getLevel(p){if(p>=85)return{l:"极高",c:"lv-vh"};if(p>=70)return{l:"偏高",c:"lv-h"};if(p>=45)return{l:"中等",c:"lv-m"};if(p>=25)return{l:"偏低",c:"lv-l"};return{l:"极低",c:"lv-vl"};}
+
+function startTest(){
+  state.currentIndex=0;state.answers={};state.startTime=Date.now();
+  state.selectedQuestions=[];
+  ['N','E','O','A','C'].forEach(d=>{
+    const pool=BANK[d].map((q,i)=>({...q,domain:d,id:d+'_'+i}));
+    const selected=shuffleArray(pool).slice(0,12);
+    state.selectedQuestions=state.selectedQuestions.concat(selected);
+  });
+  state.selectedQuestions=shuffleArray(state.selectedQuestions);
+  document.getElementById('q-total').textContent=state.selectedQuestions.length;
+  renderQuestion();
+  showView('view-test');
+}
+
+function renderQuestion(){
+  const q=state.selectedQuestions[state.currentIndex];
+  const total=state.selectedQuestions.length;
+  document.getElementById('q-current').textContent=state.currentIndex+1;
+  document.getElementById('q-num').textContent='第 '+(state.currentIndex+1)+' 题';
+  document.getElementById('progress-fill').style.width=((state.currentIndex+1)/total*100)+'%';
+  const card=document.getElementById('question-card');
+  card.className='qcard '+(state.navDir==='next'?'next-anim':'prev-anim');
+  document.getElementById('question-text').textContent=q.t;
+  const list=document.getElementById('options-list');
+  list.innerHTML='';
+  OPTIONS.forEach(o=>{
+    const btn=document.createElement('button');
+    btn.className='opt'+(state.answers[q.id]===o.v?' sel':'');
+    btn.innerHTML='<div class="orad"></div><div class="ocont"><div class="olab">'+o.l+'</div><div class="odesc">'+o.d+'</div></div>';
+    btn.onclick=()=>selectAnswer(q.id,o.v);
+    list.appendChild(btn);
+  });
+  document.getElementById('btn-prev').disabled=state.currentIndex===0;
+  const nb=document.getElementById('btn-next');
+  const isLast=state.currentIndex===total-1;
+  nb.textContent=isLast?'查看结果':'下一题';
+  nb.className='bnav '+(isLast?'bsub':'bnext');
+  nb.disabled=!state.answers[q.id];
+}
+
+function selectAnswer(qid,v){
+  state.answers[qid]=v;
+  document.querySelectorAll('.opt').forEach((b,i)=>{b.classList.toggle('sel',OPTIONS[i].v===v);});
+  document.getElementById('btn-next').disabled=false;
+  setTimeout(()=>{
+    if(state.answers[qid]===v && document.getElementById('view-test').classList.contains('active')){
+      if(state.currentIndex<state.selectedQuestions.length-1){
+        state.navDir='next';state.currentIndex++;renderQuestion();
+      }
+    }
+  },350);
+}
+function nextQuestion(){
+  if(state.currentIndex<state.selectedQuestions.length-1){state.navDir='next';state.currentIndex++;renderQuestion();}
+  else{calculateResults();}
+}
+function prevQuestion(){if(state.currentIndex>0){state.navDir='prev';state.currentIndex--;renderQuestion();}}
+function exitTest(){if(confirm('确定要退出测评吗？已作答的内容将不会保存。')){showView('view-welcome');}}
+
+function calculateResults(){
+  const scores={N:{},E:{},O:{},A:{},C:{}};
+  const domainScores={};
+  Object.keys(DOMAINS).forEach(d=>{
+    scores[d]={total:0,count:0,facets:{}};
+    Object.keys(DOMAINS[d].facets).forEach(f=>{scores[d].facets[f]={total:0,count:0};});
+  });
+  state.selectedQuestions.forEach(q=>{
+    const raw=state.answers[q.id];
+    if(raw===undefined)return;
+    const scored=q.r?(6-raw):raw;
+    scores[q.domain].total+=scored;
+    scores[q.domain].count++;
+    scores[q.domain].facets[q.f].total+=scored;
+    scores[q.domain].facets[q.f].count++;
+  });
+  Object.keys(DOMAINS).forEach(d=>{
+    domainScores[d]=scores[d].count>0?(scores[d].total/scores[d].count):0;
+    Object.keys(scores[d].facets).forEach(f=>{
+      const fc=scores[d].facets[f];
+      scores[d].facets[f].avg=fc.count>0?(fc.total/fc.count):0;
+    });
+  });
+
+  const answered=Object.keys(state.answers).length;
+  const elapsed=Math.round((Date.now()-state.startTime)/1000);
+  const mins=Math.floor(elapsed/60),secs=elapsed%60;
+  const ac={};
+  Object.values(state.answers).forEach(v=>{ac[v]=(ac[v]||0)+1;});
+  const maxSame=Math.max(...Object.values(ac));
+  const straightLine=maxSame>=answered*0.75;
+  const tooFast=elapsed<120;
+  const mean=Object.values(state.answers).reduce((a,b)=>a+b,0)/answered;
+  const variance=Object.values(state.answers).reduce((a,b)=>a+(b-mean)**2,0)/answered;
+  const lowVar=variance<0.25;
+  const hasIssue=straightLine||tooFast||lowVar;
+  const quality={answered,elapsed,mins,secs,straightLine,tooFast,lowVar,maxSame,variance,hasIssue};
+
+  if(hasIssue){
+    showQualityModal(quality,()=>{renderResults(domainScores,scores,quality);showView('view-result');});
+  }else{
+    renderResults(domainScores,scores,quality);
+    showView('view-result');
+  }
+}
+
+function showQualityModal(q,callback){
+  const issues=[];
+  if(q.straightLine)issues.push('答题模式过于单一（超过75%的题目选择了相同选项），可能存在未认真阅读题目或随意作答的情况');
+  if(q.tooFast)issues.push('答题速度过快（仅用时'+q.mins+'分'+q.secs+'秒完成60题），平均每题不足2秒，可能未充分思考');
+  if(q.lowVar)issues.push('答案多样性过低，所有回答集中在极小范围内，可能存在未区分题目差异的情况');
+  const html='<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modal-ico">⚠️</div><h3>作答质量提醒</h3><p>系统检测到您的作答可能存在以下异常：</p><ul class="warn-list">'+issues.map(i=>'<li>'+i+'</li>').join('')+'</ul><p style="font-size:13px;color:var(--muted)">以上因素可能影响测评结果的准确性。建议您在安静的环境中，留出充足时间，根据真实情况重新作答。</p><div class="modal-btns"><button class="btn btn-outline" onclick="closeModalAndRestart()">重新测评</button><button class="btn btn-dark" onclick="closeModalAndContinue()">查看结果</button></div></div></div>';
+  document.getElementById('modal-container').innerHTML=html;
+  window._qualityCallback=callback;
+}
+function closeModal(){document.getElementById('modal-container').innerHTML='';}
+function closeModalAndRestart(){closeModal();startTest();}
+function closeModalAndContinue(){closeModal();if(window._qualityCallback)window._qualityCallback();}
+
+function renderResults(domainScores,scores,quality){
+  const pcts={};
+  Object.keys(DOMAINS).forEach(d=>{pcts[d]=Math.max(0,Math.min(100,Math.round((domainScores[d]-1)/4*100)));});
+  const sorted=Object.entries(pcts).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('result-title').textContent='你的'+DOMAINS[sorted[0][0]].name+'主导型人格';
+  document.getElementById('result-subtitle').textContent='最高维度：'+DOMAINS[sorted[0][0]].name+'（'+pcts[sorted[0][0]]+'%）· 最低维度：'+DOMAINS[sorted[4][0]].name+'（'+pcts[sorted[4][0]]+'%）';
+  document.getElementById('meta-answered').textContent=quality.answered;
+  document.getElementById('meta-time').textContent=quality.mins+'分'+quality.secs+'秒';
+  document.getElementById('meta-quality').textContent=quality.hasIssue?'待核实':'良好';
+
+  const qr=document.getElementById('quality-rows');qr.innerHTML='';
+  [{l:'完成题数',v:quality.answered+' / 60'},{l:'作答用时',v:quality.mins+'分'+quality.secs+'秒'+(quality.tooFast?'（偏快）':'')},{l:'答案多样性',v:quality.lowVar?'偏低':'正常'},{l:'一致性检测',v:quality.straightLine?'存在异常':'通过'},{l:'数据有效性',v:quality.hasIssue?'参考价值有限':'有效'}].forEach(item=>{
+    const row=document.createElement('div');row.className='qrow';
+    row.innerHTML='<span class="qlab">'+item.l+'</span><span class="qval">'+item.v+'</span>';
+    qr.appendChild(row);
+  });
+
+  renderAnimal(pcts);
+  renderRadar(pcts);
+
+  const ov=document.getElementById('overview-rows');ov.innerHTML='';
+  ['O','C','E','A','N'].forEach(d=>{
+    const lv=getLevel(pcts[d]);
+    const row=document.createElement('div');row.className='ovrow';
+    row.innerHTML='<div class="ovl '+d.toLowerCase()+'">'+DOMAINS[d].letter+'</div><div class="ovi"><div class="ovn">'+DOMAINS[d].name+' <span class="ovne">'+DOMAINS[d].nameEn+'</span></div><div class="ovbw"><div class="ovb '+d.toLowerCase()+'" style="width:'+pcts[d]+'%"></div></div></div><div class="ovs"><span class="ovp '+d.toLowerCase()+'">'+pcts[d]+'%</span><span class="ovlv">'+lv.l+'</span></div>';
+    ov.appendChild(row);
+  });
+
+  const dc=document.getElementById('dimension-details');dc.innerHTML='';
+  ['O','C','E','A','N'].forEach((d,idx)=>{
+    const pct=pcts[d],lv=getLevel(pct),meta=DOMAINS[d];
+    let fh='';
+    Object.entries(meta.facets).forEach(([fk,fn])=>{
+      const fa=scores[d].facets[fk].avg;
+      const fp=Math.max(0,Math.min(100,Math.round((fa-1)/4*100)));
+      fh+='<div class="fitem"><div class="fname">'+fn+'</div><div class="fscore">'+fa.toFixed(1)+'</div><div class="fpct">'+fp+'%</div></div>';
+    });
+    const desc=getDimDesc(d,pct);
+    const card=document.createElement('div');card.className='dcard';card.style.animationDelay=(idx*0.08)+'s';
+    card.innerHTML='<div class="dhead"><div class="dico '+d.toLowerCase()+'">'+meta.letter+'</div><div class="dinf"><div class="dnm">'+meta.name+' <span class="dnme">'+meta.nameEn+'</span></div></div></div><div class="dsr"><span class="dsc '+d.toLowerCase()+'">'+pct+'%</span><span class="dpb">'+domainScores[d].toFixed(2)+' / 5.00</span><span class="dlv '+lv.c+'">'+lv.l+'</span><div class="dbc"><div class="db '+d.toLowerCase()+'" style="width:'+pct+'%"></div></div></div><p class="ddesc">'+desc+'</p><div class="ftitle">子维度得分（6项）</div><div class="fgrid">'+fh+'</div>';
+    dc.appendChild(card);
+  });
+
+  renderAdvice(pcts,domainScores,scores);
+}
+
+function getDimDesc(d,p){
+  const descs={
+    O:{high:"你对新体验、新想法和创造性活动持高度开放的态度。你充满好奇心，喜欢探索抽象概念和艺术表达，乐于挑战传统思维。你的想象力丰富，能从不同角度看待问题，是团队中的创意源泉。",mid:"你在开放性上处于中等水平。你既能接受新想法，也不会盲目追求变化。在熟悉的领域你表现稳定，在需要创新时也能适度调整。你对艺术和抽象思考有一定兴趣，但更看重实际应用。",low:"你更偏好具体、实际和传统的做事方式。你注重实用性和可操作性，对抽象理论和艺术表达兴趣有限。你倾向于依赖经过验证的方法，在稳定的环境中表现出色。你的务实风格是团队可靠的基石。"},
+    C:{high:"你是一个高度自律、有条理且可靠的人。你做事有计划、有始有终，注重细节和质量。你对承诺认真负责，总能按时完成任务。你的组织能力和坚持不懈的精神使你成为团队中最值得信赖的成员。",mid:"你在尽责性上处于中等水平。你能在需要时保持自律和条理，但也懂得灵活变通。你对重要的事情认真负责，对琐碎的细节则不过分纠结。你能在计划与灵活之间找到平衡。",low:"你更倾向于灵活、随性的生活方式。你不喜欢被严格的计划和规则束缚，更擅长应对突发情况。你可能在细节和长期规划上有所欠缺，但你的适应性和灵活性使你能在变化的环境中自如应对。"},
+    E:{high:"你是一个充满活力、善于社交的人。你喜欢与人互动，在人群中感到充满能量，乐于表达自己的观点并影响他人。你的热情和积极性能感染周围的人，是团队中的能量核心。",mid:"你在外向性上处于中等水平。你既能享受社交活动，也需要独处的时间来恢复能量。你在熟悉的人面前表现活跃，在陌生环境中则较为谨慎。你能在表达与倾听之间找到良好的平衡。",low:"你是一个偏内向的人，更享受独处或小范围的深度交流。你在行动前倾向于深思熟虑，不喜欢成为关注的焦点。你的能量来自内心世界，你善于倾听和观察，能提供有深度的见解。"},
+    A:{high:"你是一个友善、富有同情心的人。你关心他人的感受，乐于帮助别人，善于合作。你对人持信任和乐观的态度，总能看到别人好的一面。你的温暖和包容使你成为团队中的粘合剂。",mid:"你在宜人性上处于中等水平。你关心他人，但也有自己的原则和底线。你乐于合作，但在必要时也能坚持自己的立场。你对人基本信任，但也会保持适度的警惕。",low:"你更倾向于直接、竞争的处事方式。你不太在意别人的感受，更关注任务和结果。你对人持怀疑态度，不容易轻信他人。你的坦率和坚定使你在需要做艰难决策时表现出色。"},
+    N:{high:"你对压力和负面情绪比较敏感。你容易体验到焦虑、愤怒、抑郁等情绪，情绪波动较大。这种情绪敏感性也让你对危险和威胁有更强的预警能力，对他人的痛苦更有同理心。",mid:"你在情绪稳定性上处于中等水平。大多数时候你能保持情绪平稳，但在面对较大压力或挫折时也会感到焦虑、烦躁或情绪低落。你有一定的情绪恢复能力，能在挫折后调整过来。",low:"你是一个情绪非常稳定的人。你很少感到焦虑或担忧，能在压力和危机中保持冷静和理性。你乐观、自信，不容易被挫折打倒。你的情绪韧性使你在高压环境中表现出色。"}
+  };
+  if(p>=70)return descs[d].high;
+  if(p>=45)return descs[d].mid;
+  return descs[d].low;
+}
+
+function renderAnimal(pcts){
+  let best=null,bestScore=-1;
+  ANIMALS.forEach(a=>{
+    if(a.match(pcts)){
+      let score=0;
+      ['E','O','A','C','N'].forEach(d=>{
+        const m=a.match.toString().match(new RegExp('p\\.'+d+'>=(\\d+)'));
+        const ml=a.match.toString().match(new RegExp('p\\.'+d+'<=(\\d+)'));
+        if(m)score+=Math.abs(pcts[d]-parseInt(m[1]));
+        if(ml)score+=Math.abs(pcts[d]-parseInt(ml[1]));
+      });
+      score=1000-score;
+      if(score>bestScore){bestScore=score;best=a;}
+    }
+  });
+  if(!best){
+    let minDist=Infinity;
+    ANIMALS.forEach(a=>{
+      const dist=Math.abs(pcts.E-60)+Math.abs(pcts.O-60)+Math.abs(pcts.A-50)+Math.abs(pcts.C-55)+Math.abs(pcts.N-45);
+      if(dist<minDist){minDist=dist;best=a;}
+    });
+  }
+  const card=document.getElementById('animal-card');
+  card.innerHTML='<div class="animal-header"><div class="animal-emoji">'+best.emoji+'</div><div class="animal-info"><div class="animal-tag">你的性格动物</div><div class="animal-name">'+best.name+' <span style="font-size:14px;color:var(--muted);font-weight:400">'+best.nameEn+'</span></div><div class="animal-name-en">'+best.tag+'</div></div></div><div class="animal-desc">'+best.desc+'</div><div class="animal-traits">'+best.traits.map(t=>'<span class="animal-trait">'+t+'</span>').join('')+'</div>';
+}
+
+function renderRadar(pcts){
+  const svg=document.getElementById('radar-svg');
+  const cx=200,cy=200,mr=135;
+  const order=['O','C','E','A','N'];
+  const labels=['O 开放性','C 尽责性','E 外向性','A 宜人性','N 神经质'];
+  const colors=['#2e6b8a','#4a7c59','#c4922a','#b05070','#6a5a9a'];
+  const n=5;let h='';
+  for(let ring=1;ring<=5;ring++){
+    const r=(mr/5)*ring;let pts=[];
+    for(let i=0;i<n;i++){const a=(Math.PI*2*i/n)-Math.PI/2;pts.push((cx+r*Math.cos(a))+','+(cy+r*Math.sin(a)));}
+    h+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="#e2dfd7" stroke-width="1"/>';
+    h+='<text x="'+(cx+4)+'" y="'+(cy-r+4)+'" fill="#c0bdb5" font-size="9" font-family="Noto Sans SC,sans-serif">'+(ring*20)+'%</text>';
+  }
+  for(let i=0;i<n;i++){const a=(Math.PI*2*i/n)-Math.PI/2;h+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+mr*Math.cos(a))+'" y2="'+(cy+mr*Math.sin(a))+'" stroke="#e2dfd7" stroke-width="1"/>';}
+  let dp=[];
+  for(let i=0;i<n;i++){const r=(pcts[order[i]]/100)*mr;const a=(Math.PI*2*i/n)-Math.PI/2;dp.push((cx+r*Math.cos(a))+','+(cy+r*Math.sin(a)));}
+  h+='<polygon points="'+dp.join(' ')+'" fill="rgba(184,134,11,.15)" stroke="#b8860b" stroke-width="2.5"/>';
+  for(let i=0;i<n;i++){const r=(pcts[order[i]]/100)*mr;const a=(Math.PI*2*i/n)-Math.PI/2;h+='<circle cx="'+(cx+r*Math.cos(a))+'" cy="'+(cy+r*Math.sin(a))+'" r="5" fill="'+colors[i]+'" stroke="#fff" stroke-width="2"/>';}
+  for(let i=0;i<n;i++){const a=(Math.PI*2*i/n)-Math.PI/2;const lx=cx+(mr+26)*Math.cos(a);const ly=cy+(mr+18)*Math.sin(a);h+='<text x="'+lx+'" y="'+(ly-5)+'" text-anchor="middle" fill="'+colors[i]+'" font-size="12" font-weight="700" font-family="Noto Serif SC,serif">'+labels[i]+'</text><text x="'+lx+'" y="'+(ly+11)+'" text-anchor="middle" fill="#9a9ab0" font-size="11" font-family="Noto Sans SC,sans-serif">'+pcts[order[i]]+'%</text>';}
+  svg.innerHTML=h;
+}
+
+function renderAdvice(pcts,raw,scores){
+  const O=pcts.O,C=pcts.C,E=pcts.E,A=pcts.A,N=pcts.N;
+  let career='<p>基于你的人格维度组合，以下是适合你的职业类型和具体岗位建议：</p><ul>';
+  if(C>=70&&N<=35)career+='<li><strong>高尽责+低神经质（稳健执行型）</strong>：你适合需要长期坚持、精确执行和高责任感的工作。<br><strong>推荐岗位</strong>：项目经理、财务分析师、审计师、工程师、质量管理、医疗专业人员、运营管理。你在压力下能保持冷静，是组织中可靠的中坚力量。</li>';
+  if(O>=70&&E>=60)career+='<li><strong>高开放+高外向（创意领导型）</strong>：你适合需要创新思维和人际影响力的工作。<br><strong>推荐岗位</strong>：市场营销总监、广告创意总监、企业管理、战略咨询顾问、教育培训、媒体传播、品牌策划。你能将新想法通过社交网络传播落地。</li>';
+  if(A>=70&&C>=60)career+='<li><strong>高宜人+高尽责（服务协作型）</strong>：你适合需要服务意识和可靠执行的工作。<br><strong>推荐岗位</strong>：人力资源经理、客户成功经理、护理/医疗、社会工作者、教师、公共服务、行政主管。你是团队中最受欢迎的协作者。</li>';
+  if(O>=70&&E<=40)career+='<li><strong>高开放+偏内向（深度创造型）</strong>：你适合需要深度思考和独立创作的工作。<br><strong>推荐岗位</strong>：学术研究员、软件架构师、作家/编辑、数据科学家、艺术家/设计师、科学研究者、产品经理（偏研究）。你能在独处中产出高质量的创造性工作。</li>';
+  if(E>=70&&A<=40)career+='<li><strong>高外向+低宜人（竞争领导型）</strong>：你适合需要竞争和领导力的工作。<br><strong>推荐岗位</strong>：销售总监、投资银行家、企业高管、创业者、谈判代表、律师（诉讼）、竞技体育教练。你有强烈的成就动机和影响力。</li>';
+  if(N>=70&&O>=60)career+='<li><strong>高神经质+高开放（敏感艺术型）</strong>：你对情感和细节有深刻的感知力，适合需要深度情感投入的领域。<br><strong>推荐岗位</strong>：心理咨询师、作家/诗人、艺术创作、设计师、音乐创作、文学评论、研究型学者。你的敏感性是创造力的源泉。</li>';
+  if(C<=40&&E>=60)career+='<li><strong>低尽责+高外向（灵活应变型）</strong>：你适合灵活多变、需要快速应变的工作。<br><strong>推荐岗位</strong>：创业者、销售代表、活动策划、新闻记者、应急管理、多项目协调、公关专员。你不喜欢被严格规则束缚，在变化中表现出色。</li>';
+  if(O<=45&&C>=65)career+='<li><strong>低开放+高尽责（专业技术型）</strong>：你适合需要专业技能和精确执行的工作。<br><strong>推荐岗位</strong>：会计师、律师（非诉）、医生、工程师、技术专家、质量检验、数据录入与分析。你在专业领域深耕，用实力赢得尊重。</li>';
+  career+='</ul>';
+  career+='<div class="career-section"><h5>工作环境偏好</h5><div class="career-grid">';
+  career+='<div class="career-item"><div class="ci-type">创新空间</div><div class="ci-job">'+(O>=60?'需要创新和学习机会':'稳定、流程清晰')+'</div></div>';
+  career+='<div class="career-item"><div class="ci-type">目标设定</div><div class="ci-job">'+(C>=60?'明确目标和评价标准':'灵活、自主的节奏')+'</div></div>';
+  career+='<div class="career-item"><div class="ci-type">社交需求</div><div class="ci-job">'+(E>=60?'大量人际互动':'独立工作空间')+'</div></div>';
+  career+='<div class="career-item"><div class="ci-type">团队文化</div><div class="ci-job">'+(A>=60?'和谐的团队氛围':'直接、竞争的文化')+'</div></div>';
+  career+='<div class="career-item"><div class="ci-type">压力承受</div><div class="ci-job">'+(N>=60?'低压力、支持性管理':'高压、快节奏环境')+'</div></div>';
+  career+='<div class="career-item"><div class="ci-type">决策风格</div><div class="ci-job">'+(O>=60&&C>=60?'战略+执行兼顾':'偏向执行落地')+'</div></div>';
+  career+='</div></div>';
+  document.getElementById('career-advice').innerHTML=career;
+
+  const tags=[];
+  if(O>=70)tags.push('创意设计','研究开发','战略规划');
+  if(C>=70)tags.push('项目管理','财务审计','工程技术');
+  if(E>=70)tags.push('销售市场','企业管理','公共关系');
+  if(A>=70)tags.push('人力资源','心理咨询','教育服务');
+  if(N<=35)tags.push('应急管理','金融风控','高压岗位');
+  if(O>=60&&E<=40)tags.push('学术研究','软件研发','写作编辑');
+  if(E>=60&&A<=40)tags.push('创业','投资','谈判');
+  if(C>=65&&O<=45)tags.push('会计','法律','医疗');
+  const unique=[...new Set(tags)].slice(0,12);
+  const tc=document.getElementById('career-tags');tc.innerHTML='';
+  unique.forEach(t=>{const tag=document.createElement('span');tag.className='ctag';tag.textContent=t;tc.appendChild(tag);});
+
+  let rel='<p>基于你的人格特质，以下是人际关系和沟通方面的建议：</p><ul>';
+  if(E>=70)rel+='<li><strong>高外向</strong>：你在社交中充满能量，但要注意给内向的伙伴足够的空间和发言机会，学会在谈话中留白和倾听。在团队讨论中，可以有意识地邀请安静的成员发表意见。</li>';
+  else if(E<=35)rel+='<li><strong>偏内向</strong>：你的深度倾听能力是宝贵的社交资产。可以主动在重要关系中表达自己的需求和感受，不要等到被问起才开口。在大型社交场合前可以提前准备一些话题，减少焦虑。</li>';
+  if(A>=70)rel+='<li><strong>高宜人</strong>：你善于共情和合作，但要学会在必要时说"不"，建立健康的人际边界，避免过度付出导致的耗竭。记住，照顾好自己才能更好地照顾他人。</li>';
+  else if(A<=35)rel+='<li><strong>低宜人</strong>：你的直接和坦率在某些场景中是优势，但在亲密关系和团队协作中可以练习"温和地坚定"，在表达不同意见时先肯定对方的合理部分，再表达自己的看法。</li>';
+  if(N>=70)rel+='<li><strong>高神经质</strong>：你对他人的情绪变化非常敏感，这让你有很强的共情力。但要注意区分"我的情绪"和"别人的情绪"，不要过度承担他人的情绪负担。在焦虑时练习正念和深呼吸，建立情绪调节的日常习惯。</li>';
+  else if(N<=35)rel+='<li><strong>情绪稳定</strong>：你在关系中是稳定的支持者。但有时伴侣或朋友可能需要你在情感上有更多回应，可以练习主动表达关心和情感，比如定期询问对方的感受和需求。</li>';
+  if(C>=70)rel+='<li><strong>高尽责</strong>：你可靠且有规划，但在亲密关系中可以偶尔"放下计划"，享受 spontaneity，避免用管理项目的方式管理关系。记住，关系中的灵活性和情感连接比效率更重要。</li>';
+  if(O>=70)rel+='<li><strong>高开放</strong>：你喜欢讨论想法和可能性，但在实际问题的沟通中要注意落地，避免让务实型的伙伴感到不切实际。可以在分享创意的同时，给出具体的执行步骤和时间表。</li>';
+  rel+='</ul>';
+  document.getElementById('relation-advice').innerHTML=rel;
+
+  let growth='<p>基于你的人格画像，以下是个人成长和发展的建议：</p><ul>';
+  const s2=Object.entries(pcts).sort((a,b)=>b[1]-a[1]);
+  growth+='<li><strong>发挥优势（'+DOMAINS[s2[0][0]].name+' '+s2[0][1]+'%）</strong>：你在'+DOMAINS[s2[0][0]].name+'维度上表现突出，这是你的核心优势。有意识地在工作和生活中运用这一特质，选择能发挥它的环境和角色，你会更容易获得成就感和满足感。</li>';
+  growth+='<li><strong>关注发展（'+DOMAINS[s2[4][0]].name+' '+s2[4][1]+'%）</strong>：你在'+DOMAINS[s2[4][0]].name+'维度上相对较低，这不是缺陷，但在某些场景中可能成为限制。可以有意识地在这一维度上做小步练习，拓展自己的舒适区，但不要强迫自己变成另一个人。</li>';
+  if(C<=40)growth+='<li><strong>提升尽责性</strong>：尝试使用任务管理工具（如待办清单、日历提醒），将大目标拆解为可执行的小步骤，从每天完成一件小事开始建立成就感。设定明确的截止日期，并邀请他人监督。</li>';
+  if(E<=40)growth+='<li><strong>拓展外向性</strong>：每周安排一次小型社交活动（如和朋友吃饭、参加兴趣小组），在会议中主动发言一次，逐步扩大社交舒适区。记住，社交能力是可以练习的技能，不是天生的特质。</li>';
+  if(O<=40)growth+='<li><strong>培养开放性</strong>：每月尝试一件新事物（新餐厅、新运动、新书类型），阅读一篇与自己观点不同的文章并尝试理解其逻辑。参加一个跨界的活动或课程，拓展视野。</li>';
+  if(A<=40)growth+='<li><strong>增强宜人性</strong>：每天主动感谢一个人，在不同意他人观点时先肯定其合理部分再表达不同意见，练习换位思考。志愿服务或帮助他人的活动能有效提升共情能力。</li>';
+  if(N>=60)growth+='<li><strong>情绪管理</strong>：建立规律的运动和睡眠习惯，学习正念冥想或深呼吸技巧，在情绪激动时延迟反应（24小时规则），必要时寻求专业心理咨询支持。写情绪日记能帮助你识别情绪触发点。</li>';
+  growth+='<li><strong>持续成长</strong>：人格特质在成年后相对稳定，但通过有意识的练习和环境选择，你可以在一定程度上调整自己的行为模式。关键是选择适合自己特质的环境，而不是强迫自己变成另一个人。找到能让你自然发挥优势的环境，比改变自己更有效。</li>';
+  growth+='</ul>';
+  document.getElementById('growth-advice').innerHTML=growth;
+
+  let mental='<p>以下是基于你人格维度的心理健康提示：</p><ul>';
+  if(N>=70){mental+='<li><strong>高神经质风险提示</strong>：你更容易体验到焦虑、抑郁和情绪波动。建议建立规律的作息和运动习惯，学习情绪调节技巧（如正念、认知重构），建立社会支持网络。如果持续两周以上情绪低落、失眠或对事物失去兴趣，建议寻求专业心理咨询师的帮助。</li>';}
+  else if(N<=35){mental+='<li><strong>情绪稳定</strong>：你有良好的情绪韧性和抗压能力。这是一项重要的心理资源。但要注意不要忽视自己的情绪需求，定期进行自我关怀，在压力过大时也允许自己寻求支持。情绪稳定不意味着不需要情感表达。</li>';}
+  else{mental+='<li><strong>情绪状态中等</strong>：你大多数时候情绪平稳，但在面对较大压力时也会出现情绪反应。建议关注自己的压力信号，建立健康的应对机制（运动、社交、兴趣爱好），避免使用酒精或过度进食等不健康的应对方式。</li>';}
+  if(E<=35&&N>=60)mental+='<li><strong>内向+高神经质</strong>：你可能更容易在社交场合感到焦虑和消耗。建议选择小规模、深度的社交方式，给自己充足的独处恢复时间，不要强迫自己参加大型社交活动。在社交前可以提前准备，减少不确定性带来的焦虑。</li>';
+  if(C>=80)mental+='<li><strong>极高尽责性提示</strong>：你的高度自律和责任感是优势，但也要注意避免过度工作和完美主义倾向。设定合理的工作边界，允许自己休息和犯错，警惕倦怠（burnout）的早期信号（持续疲劳、效率下降、对工作失去热情）。</li>';
+  if(A>=80)mental+='<li><strong>极高宜人性提示</strong>：你非常关心他人，但要注意避免过度照顾他人而忽视自己的需求。学习自我关怀和设定边界，定期检查自己的情绪能量状态。记住，你无法从空杯子中倒出水来。</li>';
+  if(O>=70&&N>=60)mental+='<li><strong>高开放+高神经质</strong>：你有丰富的内心世界和深刻的情感体验，这既是创造力的源泉，也可能让你更容易陷入反刍思维。建议将丰富的想象力引导到创造性活动中，同时练习"想法不等于事实"的认知技巧，减少过度思考带来的内耗。</li>';
+  mental+='<li><strong>通用建议</strong>：保持规律运动（每周至少150分钟中等强度）、充足睡眠（7-9小时）、均衡饮食和积极的社交连接。这些是心理健康的基础。人格测评结果不是诊断，只是自我了解的工具。如有需要，请寻求专业心理健康服务。</li>';
+  mental+='</ul>';
+  document.getElementById('mental-advice').innerHTML=mental;
+}
+
+function restartTest(){if(confirm('确定要重新测评吗？当前结果将被清除。')){startTest();}}
+
+// 生成长图功能
+function generateImage(){
+  const overlay=document.createElement('div');
+  overlay.className='gen-overlay';
+  overlay.id='gen-overlay';
+  overlay.innerHTML='<div class="spinner"></div><div>正在生成报告长图...</div><div class="gen-tip">图片生成中请稍候，生成后可长按保存</div>';
+  document.body.appendChild(overlay);
+
+  const target=document.getElementById('report-content');
+  setTimeout(()=>{
+    html2canvas(target,{
+      scale:2,
+      useCORS:true,
+      backgroundColor:'#f4f2ec',
+      logging:false
+    }).then(canvas=>{
+      const imgUrl=canvas.toDataURL('image/png');
+      overlay.innerHTML='<button class="gen-close" onclick="closeImageOverlay()">×</button><div class="gen-img-wrap"><img src="'+imgUrl+'" alt="人格测评报告"/></div><div class="gen-tip">长按图片即可保存到相册<br>或截图保存分享</div>';
+    }).catch(err=>{
+      overlay.innerHTML='<div class="modal-ico">❌</div><div>生成失败，请稍后重试</div><button class="btn btn-dark" style="max-width:200px;margin-top:16px" onclick="closeImageOverlay()">关闭</button>';
+      console.error(err);
+    });
+  },300);
+}
+
+function closeImageOverlay(){
+  const el=document.getElementById('gen-overlay');
+  if(el)el.remove();
+}
+
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('view-test').classList.contains('active'))return;
+  if(e.key>='1'&&e.key<='5'){const idx=parseInt(e.key)-1;const btns=document.querySelectorAll('.opt');if(btns[idx])btns[idx].click();}
+  else if(e.key==='ArrowLeft'){prevQuestion();}
+  else if(e.key==='ArrowRight'||e.key==='Enter'){if(!document.getElementById('btn-next').disabled)nextQuestion();}
+});
+</script>
+</body>
+</html>
